@@ -56,7 +56,8 @@ if [[ -z $NEEDS_TAG ]]; then
     # Set git user for the commit
     git config user.name "GitHub Actions"
     git config user.email "actions@github.com"
-    # Push the tag using GH_PAT
+    # Set remote URL with GH_PAT for authentication
+    git remote set-url origin https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git
     git push origin $NEW_TAG
 else
     echo "Already a tag on this commit"
