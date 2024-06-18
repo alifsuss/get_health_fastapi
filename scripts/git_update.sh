@@ -54,8 +54,8 @@ if [[ -z $NEEDS_TAG ]]; then
     echo "Tagged with $NEW_TAG"
     git tag $NEW_TAG
     # Set git user for the commit
-    git config user.name "GitHub Actions"
-    git config user.email "actions@github.com"
+    git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    git config --global user.name "github-actions[bot]"
     # Set remote URL with GH_PAT for authentication
     git remote set-url origin https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git
     git push origin $NEW_TAG
