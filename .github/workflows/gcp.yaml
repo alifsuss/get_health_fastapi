@@ -29,23 +29,28 @@ jobs:
         run: |
             docker build -t $IMAGE_NAME:latest .
 
-      - name: Configure Docker client
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
         run: |
-            gcloud auth configure-docker --quiet
+          bash ./scripts/git_update.sh -v patch
+
+      - name: Configure Docker client
+            # gcloud auth configure-docker --quiet
+        run: |
             gcloud auth configure-docker asia-southeast2-docker.pkg.dev --quiet
 
-      - name: Push the Docker image to Google Cloud Registry
-        env:
-          GIT_TAG: v0.1.0
-        run: |
-          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
-          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
-          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
-          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+      # - name: Push the Docker image to Google Cloud Registry
+      #   env:
+      #     GIT_TAG: ${{ steps.increment-git-tag.outputs.new_tag }}
+      #   run: |
+      #     docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+      #     docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+      #     docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+      #     docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
 
       - name: Push the Docker image to Artifact Registry
         env:
-          GIT_TAG: v0.1.0
+          GIT_TAG: ${{ steps.increment-git-tag.outputs.new_tag }}
           ARTIFACT_REG: asia-southeast2-docker.pkg.dev
         run: |
           docker tag $IMAGE_NAME:latest $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
