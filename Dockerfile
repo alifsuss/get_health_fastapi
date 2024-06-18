@@ -1,7 +1,7 @@
 #create docker file to run fastapi program in main.py
 
-# Use the official Python image from the Docker Hub
-FROM python:3.8
+# Use the official Python image from the Docker Hub slim version
+FROM python:3.8-slim
 
 # Set the working directory in the container
 WORKDIR /app

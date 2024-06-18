@@ -1,0 +1,37 @@
+name: Build and push python image to GCP
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-gcr:
+    name: Build and push Docker image to Google Cloud Registry
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: get_health_fastapi
+      PROJECT_ID: mycicdproject-426810
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ env.PROJECT_ID }}
+          export_default_credentials: true
+      - name: Build the Docker image
+        run: |
+            docker build -t $IMAGE_NAME:latest
+      - name: configure docker client
+        run: |- 
+            gcloud auth configure-docker --quiet
+      - name: Push the Docker image to Google Cloud Registry
+        env:
+          GIT_TAG: v0.1.0
+        run: |
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest      
