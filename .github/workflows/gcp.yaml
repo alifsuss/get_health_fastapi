@@ -24,7 +24,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}
-          install_components: '[]'
 
       - name: Build the Docker image
         run: |
