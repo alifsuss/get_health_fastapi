@@ -37,17 +37,7 @@ jobs:
         env:
           GIT_TAG: v0.1.0
         run: |
-          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
-          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
-          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
-          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
-
-      - name: Push the Docker image to Artifact Registry
-        env:
-          GIT_TAG: v0.1.0
-          ARTIFACT_REG: asia-southeast2-docker.pkg.dev
-        run: |
-          docker tag $IMAGE_NAME:latest $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-          docker tag $IMAGE_NAME:latest $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:latest
-          docker push $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-          docker push $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:latest images/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+          docker tag $IMAGE_NAME:latest images/$PROJECT_ID/$IMAGE_NAME:latest
+          docker push images/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+          docker push images/$PROJECT_ID/$IMAGE_NAME:latest
