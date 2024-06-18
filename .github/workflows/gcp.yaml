@@ -57,13 +57,3 @@ jobs:
           docker tag $IMAGE_NAME:latest $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:latest
           docker push $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
           docker push $ARTIFACT_REG/$PROJECT_ID/images/$IMAGE_NAME:latest
-
-      - name: Update Git Tags
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git remote set-url origin https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git tag $GIT_TAG
-          git push origin $GIT_TAG
