@@ -9,7 +9,7 @@ jobs:
     name: Build and push Docker image to Google Cloud Registry
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: get_health_fastapi
+      IMAGE_NAME: get-health-fastapi
       PROJECT_ID: mycicdproject-426810
     steps:
       - name: Checkout
